@@ -22,7 +22,7 @@ public class MyVaadinUI extends UI {
         Navigator navigator = new Navigator(this, this);
         navigator.addProvider(viewProvider);
 
-        navigator.navigateTo("hello");
+        navigator.navigateTo("login");
 
     }
 
