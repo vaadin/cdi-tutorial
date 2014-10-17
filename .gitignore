@@ -1,0 +1,9 @@
+/target/
+
+# Ignored compiled theme
+src/main/webapp/VAADIN/themes/mytheme/styles.css
+
+# Ignore eclipse config files
+.classpath
+.project
+.settings/
