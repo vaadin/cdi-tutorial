@@ -19,6 +19,9 @@ public class MyVaadinUI extends UI {
     @Inject
     private Greeting greeting;
 
+    @Inject
+    private UserInfo user;
+
     @Override
     protected void init(VaadinRequest request) {
         final VerticalLayout layout = new VerticalLayout();
@@ -32,6 +35,9 @@ public class MyVaadinUI extends UI {
             }
         });
         layout.addComponent(button);
+
+        user.setName("Ernest");
+
     }
 
 }
