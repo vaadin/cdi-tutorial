@@ -6,21 +6,25 @@ import com.vaadin.cdi.UIScoped;
 
 @UIScoped
 public class UserInfo implements Serializable {
-    private String name;
+    private User user;
 
     public UserInfo() {
-        this.name = "stranger";
+        this.user = null;
     }
 
-    public UserInfo(String name) {
-        this.name = name;
+    public User getUser() {
+        return user;
     }
 
     public String getName() {
-        return name;
+        if (user == null) {
+            return "anonymous user";
+        } else {
+            return user.getName();
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

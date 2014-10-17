@@ -11,6 +11,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -20,6 +21,9 @@ public class LoginView extends CustomComponent implements View, ClickListener {
 
     @Inject
     private UserInfo user;
+
+    @Inject
+    private UserDAO userDAO;
 
     private TextField usernameField;
     private PasswordField passwordField;
@@ -52,12 +56,20 @@ public class LoginView extends CustomComponent implements View, ClickListener {
 
     @Override
     public void buttonClick(ClickEvent event) {
-        // Dummy implementation
         String username = usernameField.getValue();
         String password = passwordField.getValue();
-        user.setName(username);
+
+        User loginUser = userDAO.getUserBy(username, password);
+        if (loginUser == null) {
+            new Notification("Wrong password", Notification.TYPE_ERROR_MESSAGE)
+                    .show(getUI().getPage());
+            return;
+        }
+
+        user.setUser(loginUser);
+
         if (navigator != null) {
-            navigator.navigateTo("hello");
+            navigator.navigateTo("chat");
         }
     }
 }
