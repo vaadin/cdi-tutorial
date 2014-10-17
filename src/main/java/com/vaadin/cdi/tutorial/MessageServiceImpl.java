@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
         activeUIMap.remove(user);
     }
 
-    private void observeMessage(@Observes final Message message) {
+    private void observeMessage(@Observes @OriginalAuthor final Message message) {
         UI recipientUI = activeUIMap.get(message.getRecipient());
         if (recipientUI != null && recipientUI.isAttached()
                 && !recipientUI.isClosing()) {

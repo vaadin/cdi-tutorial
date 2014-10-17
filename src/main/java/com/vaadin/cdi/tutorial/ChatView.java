@@ -1,6 +1,9 @@
 package com.vaadin.cdi.tutorial;
 
+import static javax.enterprise.event.Reception.IF_EXISTS;
+
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
@@ -36,6 +39,10 @@ public class ChatView extends CustomComponent implements View {
     private Layout messageLayout;
 
     @Inject
+    private MessageService messageService;
+
+    @Inject
+    @OriginalAuthor
     private javax.enterprise.event.Event<Message> messageEvent;
 
     private static final int MAX_MESSAGES = 16;
@@ -56,7 +63,13 @@ public class ChatView extends CustomComponent implements View {
             }
         }
         setCompositionRoot(layout);
+        messageService.registerParticipant(userInfo.getUser(), getUI());
+    }
 
+    @Override
+    public void detach() {
+        messageService.unregisterParticipant(userInfo.getUser());
+        super.detach();
     }
 
     private Layout buildErrorLayout() {
@@ -169,7 +182,8 @@ public class ChatView extends CustomComponent implements View {
         return button;
     }
 
-    private void observeMessage(@Observes Message message) {
+    private void observeMessage(
+            @Observes(notifyObserver = IF_EXISTS) @Any Message message) {
         User currentUser = userInfo.getUser();
         if (message.involves(currentUser, targetUser)) {
             if (messageLayout != null) {

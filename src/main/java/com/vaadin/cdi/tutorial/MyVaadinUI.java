@@ -2,6 +2,7 @@ package com.vaadin.cdi.tutorial;
 
 import javax.inject.Inject;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIViewProvider;
@@ -11,6 +12,7 @@ import com.vaadin.ui.UI;
 
 @Theme("valo")
 @CDIUI("")
+@Push
 @SuppressWarnings("serial")
 public class MyVaadinUI extends UI {
 
