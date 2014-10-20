@@ -89,16 +89,20 @@ public class ChatView extends CustomComponent implements View {
         layout.setSpacing(true);
         layout.addComponent(new Label("Talking to " + targetUser.getName()));
         layout.addComponent(generateBackButton());
-        layout.addComponent(buildChatLayout(targetUser));
+        layout.addComponent(buildChatLayout());
         return layout;
     }
 
-    private Component buildChatLayout(final User targetUser) {
+    private Component buildChatLayout() {
         VerticalLayout chatLayout = new VerticalLayout();
         chatLayout.setSizeFull();
         chatLayout.setSpacing(true);
         messageLayout = new VerticalLayout();
         messageLayout.setWidth("100%");
+        for (Message message : messageService.getLatestMessages(
+                userInfo.getUser(), targetUser, MAX_MESSAGES)) {
+            observeMessage(message);
+        }
         final TextField messageField = new TextField();
         messageField.setWidth("100%");
         final Button sendButton = new Button("Send");
@@ -195,4 +199,5 @@ public class ChatView extends CustomComponent implements View {
             }
         }
     }
+
 }
