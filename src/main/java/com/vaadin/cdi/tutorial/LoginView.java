@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -29,12 +28,11 @@ public class LoginView extends CustomComponent implements View, ClickListener {
     private PasswordField passwordField;
     private Button loginButton;
 
-    private Navigator navigator;
+    @Inject
+    private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
     @Override
     public void enter(ViewChangeEvent event) {
-
-        navigator = getUI().getNavigator();
 
         usernameField = new TextField("Username");
         passwordField = new PasswordField("Password");
@@ -68,8 +66,6 @@ public class LoginView extends CustomComponent implements View, ClickListener {
 
         user.setUser(loginUser);
 
-        if (navigator != null) {
-            navigator.navigateTo("chat");
-        }
+        navigationEvent.fire(new NavigationEvent("chat"));
     }
 }

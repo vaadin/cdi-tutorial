@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.cdi.internal.Conventions;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
@@ -22,7 +21,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @CDIView
@@ -44,6 +42,9 @@ public class ChatView extends CustomComponent implements View {
     @Inject
     @OriginalAuthor
     private javax.enterprise.event.Event<Message> messageEvent;
+
+    @Inject
+    private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
 
     private static final int MAX_MESSAGES = 16;
 
@@ -152,14 +153,8 @@ public class ChatView extends CustomComponent implements View {
         button.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                UI ui = getUI();
-                if (ui != null) {
-                    Navigator navi = ui.getNavigator();
-                    if (navi != null) {
-                        navi.navigateTo(Conventions
-                                .deriveMappingForView(ChatView.class));
-                    }
-                }
+                navigationEvent.fire(new NavigationEvent(Conventions
+                        .deriveMappingForView(ChatView.class)));
             }
         });
         return button;
@@ -171,16 +166,10 @@ public class ChatView extends CustomComponent implements View {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                UI ui = getUI();
-                if (ui != null) {
-                    Navigator navi = ui.getNavigator();
-                    if (navi != null) {
-                        navi.navigateTo(Conventions
-                                .deriveMappingForView(ChatView.class)
-                                + "/"
-                                + user.getUsername());
-                    }
-                }
+                navigationEvent.fire(new NavigationEvent(Conventions
+                        .deriveMappingForView(ChatView.class)
+                        + "/"
+                        + user.getUsername()));
             }
         });
         return button;
