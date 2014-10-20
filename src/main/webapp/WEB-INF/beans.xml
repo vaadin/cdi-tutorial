@@ -2,4 +2,7 @@
     <alternatives>
         <class>com.vaadin.cdi.tutorial.UserGreetingImpl</class>
     </alternatives>
+    <decorators>
+        <class>com.vaadin.cdi.tutorial.NavigationLogDecorator</class>
+    </decorators>
 </beans>
