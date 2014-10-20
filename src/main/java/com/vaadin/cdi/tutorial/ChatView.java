@@ -145,6 +145,16 @@ public class ChatView extends CustomComponent implements View {
             }
             layout.addComponent(generateUserSelectionButton(user));
         }
+        layout.addComponent(new Label("Admin:"));
+        Button createUserButton = new Button("Create user");
+        createUserButton.addClickListener(new ClickListener() {
+
+            @Override
+            public void buttonClick(ClickEvent event) {
+                navigationEvent.fire(new NavigationEvent("create-user"));
+            }
+        });
+        layout.addComponent(createUserButton);
         return layout;
     }
 
@@ -178,7 +188,7 @@ public class ChatView extends CustomComponent implements View {
     private void observeMessage(
             @Observes(notifyObserver = IF_EXISTS) @Any Message message) {
         User currentUser = userInfo.getUser();
-        if (message.involves(currentUser, targetUser)) {
+        if (targetUser != null && message.involves(currentUser, targetUser)) {
             if (messageLayout != null) {
                 if (messageLayout.getComponentCount() >= MAX_MESSAGES) {
                     messageLayout.removeComponent(messageLayout
