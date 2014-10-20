@@ -16,6 +16,9 @@ public class NavigationServiceImpl implements NavigationService {
     private CDIViewProvider viewProvider;
 
     @Inject
+    private ErrorView errorView;
+
+    @Inject
     private UI ui;
 
     @PostConstruct
@@ -23,6 +26,7 @@ public class NavigationServiceImpl implements NavigationService {
         if (ui.getNavigator() == null) {
             Navigator navigator = new Navigator(ui, ui);
             navigator.addProvider(viewProvider);
+            navigator.setErrorView(errorView);
         }
     }
 
