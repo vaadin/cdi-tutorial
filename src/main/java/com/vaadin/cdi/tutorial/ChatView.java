@@ -7,6 +7,7 @@ import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.cdi.internal.Conventions;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
@@ -45,6 +46,9 @@ public class ChatView extends CustomComponent implements View {
 
     @Inject
     private javax.enterprise.event.Event<NavigationEvent> navigationEvent;
+
+    @Inject
+    private AccessControl accessControl;
 
     private static final int MAX_MESSAGES = 16;
 
@@ -145,16 +149,18 @@ public class ChatView extends CustomComponent implements View {
             }
             layout.addComponent(generateUserSelectionButton(user));
         }
-        layout.addComponent(new Label("Admin:"));
-        Button createUserButton = new Button("Create user");
-        createUserButton.addClickListener(new ClickListener() {
+        if (accessControl.isUserInRole("admin")) {
+            layout.addComponent(new Label("Admin:"));
+            Button createUserButton = new Button("Create user");
+            createUserButton.addClickListener(new ClickListener() {
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                navigationEvent.fire(new NavigationEvent("create-user"));
-            }
-        });
-        layout.addComponent(createUserButton);
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    navigationEvent.fire(new NavigationEvent("create-user"));
+                }
+            });
+            layout.addComponent(createUserButton);
+        }
         return layout;
     }
 
