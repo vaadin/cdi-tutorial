@@ -3,7 +3,12 @@
 # Ignored compiled theme
 src/main/webapp/VAADIN/themes/mytheme/styles.css
 
+src/main/webapp/VAADIN/themes/mytheme/addons.scss
+src/main/webapp/VAADIN/widgetsets
+
 # Ignore eclipse config files
 .classpath
 .project
 .settings/
+.idea
+*.iml
