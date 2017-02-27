@@ -79,9 +79,6 @@ public class ChatView extends CustomComponent implements View {
 
     private Layout buildErrorLayout() {
         VerticalLayout layout = new VerticalLayout();
-        layout.setWidth("100%");
-        layout.setMargin(true);
-        layout.setSpacing(true);
         layout.addComponent(new Label("No such user"));
         layout.addComponent(generateBackButton());
         return layout;
@@ -90,8 +87,6 @@ public class ChatView extends CustomComponent implements View {
     private Layout buildUserLayout() {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
-        layout.setMargin(true);
-        layout.setSpacing(true);
         layout.addComponent(new Label("Talking to " + targetUser.getName()));
         layout.addComponent(generateBackButton());
         layout.addComponent(buildChatLayout());
@@ -101,7 +96,7 @@ public class ChatView extends CustomComponent implements View {
     private Component buildChatLayout() {
         VerticalLayout chatLayout = new VerticalLayout();
         chatLayout.setSizeFull();
-        chatLayout.setSpacing(true);
+        chatLayout.setMargin(false);
         messageLayout = new VerticalLayout();
         messageLayout.setWidth("100%");
         for (Message message : messageService.getLatestMessages(
@@ -139,9 +134,6 @@ public class ChatView extends CustomComponent implements View {
 
     private Layout buildUserSelectionLayout() {
         VerticalLayout layout = new VerticalLayout();
-        layout.setWidth("100%");
-        layout.setMargin(true);
-        layout.setSpacing(true);
         layout.addComponent(new Label("Select user to talk to:"));
         for (User user : userDAO.getUsers()) {
             if (user.equals(userInfo.getUser())) {

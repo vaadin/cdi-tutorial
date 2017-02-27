@@ -43,8 +43,6 @@ public class LoginView extends CustomComponent implements View, ClickListener {
         VerticalLayout layout = new VerticalLayout();
         setCompositionRoot(layout);
         layout.setSizeFull();
-        layout.setMargin(true);
-        layout.setSpacing(true);
 
         layout.addComponent(usernameField);
         layout.addComponent(passwordField);

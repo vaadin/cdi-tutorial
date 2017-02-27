@@ -6,7 +6,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
-import com.vaadin.data.BeanBinder;
+import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.navigator.View;
@@ -23,7 +23,7 @@ public class CreateUserView extends CustomComponent implements View {
 
     @Inject
     UserDAO userDAO;
-    
+
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private TextField username = new TextField();
@@ -35,11 +35,9 @@ public class CreateUserView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeEvent event) {
         final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
         layout.addComponent(new Label("Create new user"));
 
-        final BeanBinder<User> binder = new BeanBinder<>(User.class);
+        final Binder<User> binder = new Binder<>(User.class);
         layout.addComponent(firstName);
         layout.addComponent(lastName);
         layout.addComponent(username);
@@ -61,18 +59,19 @@ public class CreateUserView extends CustomComponent implements View {
         layout.addComponent(messageLabel);
 
         Button commitButton = new Button("Create");
-		commitButton.addClickListener(clickEvent -> {
-			binder.getBean().ifPresent(user -> {
-				try {
-					binder.writeBean(user);
-					userDAO.saveUser(user);
-					binder.setBean(new User(ID_FACTORY.incrementAndGet(), "", "", "", "", "", false));
-					messageLabel.setValue("User created");
-				} catch (ValidationException e) {
-					messageLabel.setValue(e.getMessage());
-				}
-			});
-		});
+        commitButton.addClickListener(clickEvent -> {
+            User user = binder.getBean();
+            if (user != null) {
+                try {
+                    binder.writeBean(user);
+                    userDAO.saveUser(user);
+                    binder.setBean(new User(ID_FACTORY.incrementAndGet(), "", "", "", "", "", false));
+                    messageLabel.setValue("User created");
+                } catch (ValidationException e) {
+                    messageLabel.setValue(e.getMessage());
+                }
+            }
+        });
 
         // bind remaining fields
         binder.bindInstanceFields(this);

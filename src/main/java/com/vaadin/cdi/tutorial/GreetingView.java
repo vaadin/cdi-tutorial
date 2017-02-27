@@ -20,7 +20,7 @@ public class GreetingView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeEvent event) {
         final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
+        layout.setSpacing(false);
         setCompositionRoot(layout);
 
         Button button = new Button("Click Me");

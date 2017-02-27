@@ -24,8 +24,6 @@ public class ErrorView extends CustomComponent implements View {
     public void enter(ViewChangeEvent event) {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
-        layout.setMargin(true);
-        layout.setSpacing(true);
 
         layout.addComponent(new Label(
                 "Unfortunately, the page you've requested does not exists."));
