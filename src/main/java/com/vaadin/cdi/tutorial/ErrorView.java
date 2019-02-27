@@ -1,7 +1,10 @@
 package com.vaadin.cdi.tutorial;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import com.vaadin.cdi.CDIView;
+import com.vaadin.cdi.ViewScoped;
 import com.vaadin.cdi.access.AccessControl;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -12,6 +15,8 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+//@CDIView("error")
+//@ViewScoped
 public class ErrorView extends CustomComponent implements View {
 
     @Inject

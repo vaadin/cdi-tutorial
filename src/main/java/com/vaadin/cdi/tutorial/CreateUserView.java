@@ -3,6 +3,7 @@ package com.vaadin.cdi.tutorial;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
@@ -17,13 +18,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@CDIView
+@CDIView("create-user")
 @RolesAllowed({ "admin" })
 public class CreateUserView extends CustomComponent implements View {
 
     @Inject
     UserDAO userDAO;
 
+    @Inject
+    private Instance<TitleLabel> titleLabel;
+    
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private TextField username = new TextField();
@@ -35,7 +39,8 @@ public class CreateUserView extends CustomComponent implements View {
     @Override
     public void enter(ViewChangeEvent event) {
         final VerticalLayout layout = new VerticalLayout();
-        layout.addComponent(new Label("Create new user"));
+        titleLabel.get().setValue("Create new user");
+        layout.addComponent(titleLabel.get());
 
         final Binder<User> binder = new Binder<>(User.class);
         layout.addComponent(firstName);
