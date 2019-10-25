@@ -4,12 +4,14 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import com.vaadin.cdi.CDINavigator;
 import com.vaadin.cdi.CDIViewProvider;
 import com.vaadin.cdi.NormalUIScoped;
+import com.vaadin.cdi.UIScoped;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.UI;
 
-@NormalUIScoped
+@UIScoped
 public class NavigationServiceImpl implements NavigationService {
 
     @Inject
@@ -21,10 +23,13 @@ public class NavigationServiceImpl implements NavigationService {
     @Inject
     private UI ui;
 
+    @Inject
+    private CDINavigator navigator;
+    
     @PostConstruct
     public void initialize() {
         if (ui.getNavigator() == null) {
-            Navigator navigator = new Navigator(ui, ui);
+            navigator.init(ui, ui);
             navigator.addProvider(viewProvider);
             navigator.setErrorView(errorView);
         }
@@ -33,7 +38,7 @@ public class NavigationServiceImpl implements NavigationService {
     @Override
     public void onNavigationEvent(@Observes NavigationEvent event) {
         try {
-            ui.getNavigator().navigateTo(event.getNavigateTo());
+            navigator.navigateTo(event.getNavigateTo());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

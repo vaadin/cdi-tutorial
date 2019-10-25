@@ -1,5 +1,6 @@
 package com.vaadin.cdi.tutorial;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
@@ -18,6 +19,9 @@ import com.vaadin.ui.VerticalLayout;
 @CDIView("login")
 public class LoginView extends CustomComponent implements View, ClickListener {
 
+	@Inject
+	private Instance<TitleLabel> titleLabel;
+	
     @Inject
     private UserInfo user;
 
@@ -34,6 +38,8 @@ public class LoginView extends CustomComponent implements View, ClickListener {
     @Override
     public void enter(ViewChangeEvent event) {
 
+        titleLabel.get().setValue("Login view");
+
         usernameField = new TextField("Username");
         passwordField = new PasswordField("Password");
         loginButton = new Button("Login");
@@ -44,6 +50,7 @@ public class LoginView extends CustomComponent implements View, ClickListener {
         setCompositionRoot(layout);
         layout.setSizeFull();
 
+        layout.addComponent(titleLabel.get());
         layout.addComponent(usernameField);
         layout.addComponent(passwordField);
         layout.addComponent(loginButton);

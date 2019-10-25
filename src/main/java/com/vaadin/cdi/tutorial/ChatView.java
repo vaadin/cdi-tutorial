@@ -4,6 +4,7 @@ import static javax.enterprise.event.Reception.IF_EXISTS;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import com.vaadin.cdi.CDIView;
@@ -24,9 +25,12 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@CDIView
+@CDIView("chat")
 public class ChatView extends CustomComponent implements View {
 
+	@Inject
+	private Instance<TitleLabel> titleLabel;
+	
     @Inject
     private UserDAO userDAO;
 
@@ -54,8 +58,9 @@ public class ChatView extends CustomComponent implements View {
 
     @Override
     public void enter(ViewChangeEvent event) {
+        titleLabel.get().setValue("Chat view");
         String parameters = event.getParameters();
-        Layout layout;
+        VerticalLayout layout;
         if (parameters.isEmpty()) {
             targetUser = null;
             layout = buildUserSelectionLayout();
@@ -67,6 +72,7 @@ public class ChatView extends CustomComponent implements View {
                 layout = buildUserLayout();
             }
         }
+        layout.addComponentAsFirst(titleLabel.get());
         setCompositionRoot(layout);
         messageService.registerParticipant(userInfo.getUser(), getUI());
     }
@@ -77,14 +83,14 @@ public class ChatView extends CustomComponent implements View {
         super.detach();
     }
 
-    private Layout buildErrorLayout() {
+    private VerticalLayout buildErrorLayout() {
         VerticalLayout layout = new VerticalLayout();
         layout.addComponent(new Label("No such user"));
         layout.addComponent(generateBackButton());
         return layout;
     }
 
-    private Layout buildUserLayout() {
+    private VerticalLayout buildUserLayout() {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.addComponent(new Label("Talking to " + targetUser.getName()));
@@ -132,7 +138,7 @@ public class ChatView extends CustomComponent implements View {
         return chatLayout;
     }
 
-    private Layout buildUserSelectionLayout() {
+    private VerticalLayout buildUserSelectionLayout() {
         VerticalLayout layout = new VerticalLayout();
         layout.addComponent(new Label("Select user to talk to:"));
         for (User user : userDAO.getUsers()) {
